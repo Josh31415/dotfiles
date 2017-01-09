@@ -24,6 +24,12 @@ set hlsearch
 set paste
 set autoread
 
+set diffopt+=iwhite
+
+inoremap jj <Esc>
+
+inoremap <Esc> <Nop>
+
 colorscheme molokai
 let g:molokai_original = 1
 
