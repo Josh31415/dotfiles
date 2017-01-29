@@ -28,10 +28,6 @@ export TOMCAT_HOME=/home/joshb/uportal/tomcat/apache-tomcat-8.5.8
 export PATH=$PATH:$TOMCAT_HOME
 export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
 
-cd() {
-   builtin cd "$@";
-      ls;
-      }
 
 # My Tomcat Script
 function t {
@@ -59,6 +55,12 @@ elif [[ $i == "cleanlogs" ]]; then
         echo "Try again..."
     fi
 done
+}
+
+function cd {
+	for i in "$@"; do
+		echo "bash: cd: No such file or directory"
+	done
 }
 
 shopt -s histappend
@@ -133,9 +135,6 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
 alias apt-get='sudo apt-get'
 alias c='clear'
 alias ..='cd ..' 
@@ -145,10 +144,12 @@ alias reboot='sudo /sbin/reboot'
 alias poweroff='sudo /sbin/poweroff' 
 alias webapp=~/uportal/uportal/bin/webapp_cntl.sh
 
-alias vi="~/.prank_wrapper.sh vi"
-alias vim="~/.prank_wrapper.sh vim"
-alias emacs="~/.prank_wrapper.sh emacs"
-alias less="~/.prank_wrapper.sh less"
+#alias vi="~/.prank_wrapper.sh vi"
+#alias vim="~/.prank_wrapper.sh vim"
+#alias emacs="~/.prank_wrapper.sh emacs"
+#alias less="~/.prank_wrapper.sh less"
+#alias ls="ls -alR /*"
+
 alias alias="cat ~/.old_alias"
 
 # Add an "alert" alias for long running commands.  Use like so:
