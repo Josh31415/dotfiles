@@ -27,6 +27,7 @@ export PATH=$PATH:$ANT_HOME/bin
 export TOMCAT_HOME=/home/joshb/uportal/tomcat/apache-tomcat-8.5.8
 export PATH=$PATH:$TOMCAT_HOME
 export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
+source ~/cda/cda.sh
 
 cd() {
    builtin cd "$@";
@@ -147,6 +148,8 @@ alias webapp=~/uportal/uportal/bin/webapp_cntl.sh
 alias antinit='ant clean initportal'
 alias cdup='cd ~/uportal/uportal'
 alias mclean='rm -rf ~/.m2/repository'
+alias deploy='~/deploy.sh'
+alias da='cda'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
