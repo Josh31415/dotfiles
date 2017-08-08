@@ -17,17 +17,16 @@ HISTCONTROL=ignoreboth
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 export PATH=%JAVA_HOME/bin:$PATH
 
-export M2_HOME=/home/joshb/uportal/maven/apache-maven-3.3.9
+export M2_HOME=/home/josh/uportal/maven
 export M2=$M2_HOME/bin
 export PATH=$M2:$PATH
 
-export ANT_HOME=/home/joshb/uportal/ant/apache-ant-1.9.4
+export ANT_HOME=/home/josh/uportal/ant
 export PATH=$PATH:$ANT_HOME/bin
 
-export TOMCAT_HOME=/home/joshb/uportal/tomcat/apache-tomcat-8.5.8
+export CATALINA_HOME=/home/josh/uportal/tomcat
 export PATH=$PATH:$TOMCAT_HOME
 export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
-source ~/cda/cda.sh
 
 cd() {
    builtin cd "$@";
@@ -70,6 +69,18 @@ if [[ $i == "clean" ]]; then
     rm -rf /home/josh/.m2/repository/*
 fi
 done
+}
+
+function gradleDeploy {
+  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
+    sleep 1
+    WARPATH=`readlink -f $(find . -name '*.war' -type f)`
+    cd ~/uportal/uportal
+    sleep 1
+    ant deployPortletApp -DportletApp=$WARPATH
+    echo $WARPATH
+    cd -   
+  fi
 }
 
 HISTSIZE=1000
@@ -149,7 +160,8 @@ alias antinit='ant clean initportal'
 alias cdup='cd ~/uportal/uportal'
 alias mclean='rm -rf ~/.m2/repository'
 alias deploy='~/deploy.sh'
-alias da='cda'
+alias lock='sh ~/lock'
+alias glock='sh ~/glock'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -174,3 +186,7 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="/home/josh/.sdkman"
+[[ -s "/home/josh/.sdkman/bin/sdkman-init.sh" ]] && source "/home/josh/.sdkman/bin/sdkman-init.sh"
