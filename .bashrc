@@ -72,12 +72,31 @@ done
 }
 
 function gradleDeploy {
+  find src/main/react/src -name "*.js" -exec prettier --write --no-semi {} \;  
   if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
     sleep 1
     WARPATH=`readlink -f $(find . -name '*.war' -type f)`
     cd ~/uportal/uportal
     sleep 1
+   
+    /home/josh/uportal/uportal/bin/webapp_cntl.sh stop bookmarks
+    rm -rf ~/uportal/tomcat/webapps/bookmarks
     ant deployPortletApp -DportletApp=$WARPATH
+    /home/josh/uportal/uportal/bin/webapp_cntl.sh start bookmarks
+    echo $WARPATH
+    cd -   
+  fi
+}
+
+function gradleSoffitDeploy {
+  find src/main/react/src -name "*.js" -exec prettier --write --no-semi {} \;  
+  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
+    sleep 1
+   
+    WARPATH=`readlink -f $(find . -name '*.war' -type f)`
+    cd ~/uportal/uportal
+    sleep 1
+    java -Dcatalina.home=build -Dserver.port=8090 -jar $WARPATH
     echo $WARPATH
     cd -   
   fi
