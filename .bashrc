@@ -1,4 +1,4 @@
-# ~/b.ashrc: executed by bash(1) for non-login shells.
+# ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
 
@@ -12,26 +12,31 @@ esac
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
- #append to the history file, don't overwrite it
-
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-export PATH=%JAVA_HOME/bin:$PATH
+#append to the history file, don't overwrite it
+export JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64
+export PATH=$PATH:$JAVA_HOME/bin
 
 export M2_HOME=/home/josh/uportal/maven
 export M2=$M2_HOME/bin
-export PATH=$M2:$PATH
+export PATH=$PATH:$M2
 
 export ANT_HOME=/home/josh/uportal/ant
 export PATH=$PATH:$ANT_HOME/bin
 
 export CATALINA_HOME=/home/josh/uportal/tomcat
-export PATH=$PATH:$TOMCAT_HOME
+#export CATALINA_HOME=/home/josh/uportal/uPortal-start/.gradle/tomcat
+export PATH=$PATH:$CATALINA_HOME
+
+export VUE_HOME=/usr/local/bin/vue
+export PATH=$PATH:$VUE_HOME
 export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
+
+export PORTAL_HOME=~/uportal/
 
 cd() {
    builtin cd "$@";
-      ls;
-      }
+   ls;
+}
 
 # My Tomcat Script
 function t {
@@ -72,7 +77,7 @@ done
 }
 
 function gradleDeploy {
-  find src/main/react/src -name "*.js" -exec prettier --write --no-semi {} \;  
+  find src/main/react/src -name "*.js" -exec prettier --single-quote --no-bracket-spacing --write --no-semi {} \;  
   if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
     sleep 1
     WARPATH=`readlink -f $(find . -name '*.war' -type f)`
@@ -89,16 +94,16 @@ function gradleDeploy {
 }
 
 function gradleSoffitDeploy {
-  find src/main/react/src -name "*.js" -exec prettier --write --no-semi {} \;  
-  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
+  find src/main/react/src -name "*.js" -exec prettier --write --no-semi {} \;
+  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then
     sleep 1
-   
+
     WARPATH=`readlink -f $(find . -name '*.war' -type f)`
     cd ~/uportal/uportal
     sleep 1
     java -Dcatalina.home=build -Dserver.port=8090 -jar $WARPATH
     echo $WARPATH
-    cd -   
+    cd -
   fi
 }
 
@@ -165,19 +170,23 @@ fi
 
 # some more ls aliases
 alias ll='ls -alF'
+alias LS='ls'
 alias la='ls -A'
+alias sl='sl -alFe'
 alias l='ls -CF'
-alias apt-get='sudo apt-get'
+alias apt='sudo apt'
 alias c='clear'
-alias ..='cd ..' 
+alias ..='cd ../..' 
 alias ...='cd ../../../' 
 alias ....='cd ../../../../'
+alias .....='cd ../../../../../'
 alias reboot='sudo /sbin/reboot'
 alias poweroff='sudo /sbin/poweroff' 
 alias webapp=~/uportal/uportal/bin/webapp_cntl.sh
 alias antinit='ant clean initportal'
 alias cdup='cd ~/uportal/uportal'
 alias mclean='rm -rf ~/.m2/repository'
+alias gclean='rm -rf ~/.gradle'
 alias deploy='~/deploy.sh'
 alias lock='sh ~/lock'
 alias glock='sh ~/glock'
@@ -209,3 +218,6 @@ fi
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/josh/.sdkman"
 [[ -s "/home/josh/.sdkman/bin/sdkman-init.sh" ]] && source "/home/josh/.sdkman/bin/sdkman-init.sh"
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
