@@ -12,8 +12,9 @@ esac
 # See bash(1) for more options
 HISTCONTROL=ignoreboth
 
-#append to the history file, don't overwrite it
-export JAVA_HOME=/usr/lib/jvm/java-9-openjdk-amd64
+#append to the history file, don't overwr
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+#export JAVA_HOME=/usr/lib/jvm/jdk-10
 export PATH=$PATH:$JAVA_HOME/bin
 
 export M2_HOME=/home/josh/uportal/maven
@@ -23,9 +24,12 @@ export PATH=$PATH:$M2
 export ANT_HOME=/home/josh/uportal/ant
 export PATH=$PATH:$ANT_HOME/bin
 
-export CATALINA_HOME=/home/josh/uportal/tomcat
-#export CATALINA_HOME=/home/josh/uportal/uPortal-start/.gradle/tomcat
+#export CATALINA_HOME=/home/josh/uportal/tomcat
+export CATALINA_HOME=/home/josh/uportal/uportal-start/.gradle/tomcat
 export PATH=$PATH:$CATALINA_HOME
+
+export GECKO_HOME=/home/josh/Downloads/geckodriver
+export PATH=$PATH:$GECKO_HOME
 
 export VUE_HOME=/usr/local/bin/vue
 export PATH=$PATH:$VUE_HOME
@@ -168,7 +172,7 @@ fi
 # colored GCC warnings and errors
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
-# some more ls aliases
+# some more les
 alias ll='ls -alF'
 alias LS='ls'
 alias la='ls -A'
@@ -190,6 +194,9 @@ alias gclean='rm -rf ~/.gradle'
 alias deploy='~/deploy.sh'
 alias lock='sh ~/lock'
 alias glock='sh ~/glock'
+alias mi='mvn clean install -e'
+alias mp='mvn clean package -e'
+alias tlog="cd ${CATALINA_HOME}/logs/"
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
