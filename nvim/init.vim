@@ -1,38 +1,41 @@
-if exists('*minpac#init')
-  call minpac#init()
-  call minpac#add('k-takata/minpac', {'type': 'opt'})
-  call minpac#add('Shougo/deoplete.nvim')
-  call minpac#add('Shougo/neosnippet')
-  call minpac#add('w0rp/ale', { 'do': '!npm install -g prettier' })
-  call minpac#add('Raimondi/delimitMate')
-  call minpac#add('manasthakur/vim-commentor')
-  call minpac#add('tpope/vim-surround')
-  call minpac#add('tpope/vim-repeat')
-  call minpac#add('tpope/vim-fugitive')
-  call minpac#add('vim-airline/vim-airline')
-  call minpac#add('AndrewRadev/splitjoin.vim')
-  call minpac#add('airblade/vim-gitgutter')
-  call minpac#add('sheerun/vim-polyglot')
-  call minpac#add('mattn/emmet-vim')
-  call minpac#add('dyng/ctrlsf.vim')
-  call minpac#add('junegunn/fzf')
-  call minpac#add('junegunn/fzf.vim')
-  call minpac#add('kristijanhusak/vim-js-file-import')
-  call minpac#add('kristijanhusak/vim-dirvish-git')
-  call minpac#add('vimwiki/vimwiki')
-  call minpac#add('editorconfig/editorconfig-vim')
-  call minpac#add('morhetz/gruvbox')
-  call minpac#add('justinmk/vim-dirvish')
-  call minpac#add('andymass/vim-matchup')
-  call minpac#add('haya14busa/vim-asterisk')
-  call minpac#add('osyo-manga/vim-anzu')
-  call minpac#add('autozimu/LanguageClient-neovim', { 'do': '!bash install.sh' })
-  call minpac#add('soywod/vim-keepeye')
-  call minpac#add('wellle/targets.vim')
-endif
+packadd minpac
 
-command! PackUpdate packadd minpac | source $MYVIMRC | call minpac#update()
-command! PackClean  packadd minpac | source $MYVIMRC | call minpac#clean()
+call minpac#init()
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+call minpac#add('Shougo/deoplete.nvim')
+call minpac#add('Shougo/Deol.nvim')
+call minpac#add('scrooloose/nerdtree')
+call minpac#add('fatih/vim-go')
+call minpac#add('rust-lang/rust.vim')
+call minpac#add('Shougo/neosnippet')
+call minpac#add('w0rp/ale', { 'do': '!npm install -g prettier' })
+call minpac#add('Raimondi/delimitMate')
+call minpac#add('manasthakur/vim-commentor')
+call minpac#add('tpope/vim-surround')
+call minpac#add('tpope/vim-repeat')
+call minpac#add('tpope/vim-fugitive')
+call minpac#add('vim-airline/vim-airline')
+call minpac#add('AndrewRadev/splitjoin.vim')
+call minpac#add('airblade/vim-gitgutter')
+call minpac#add('sheerun/vim-polyglot')
+call minpac#add('mattn/emmet-vim')
+call minpac#add('dyng/ctrlsf.vim')
+call minpac#add('junegunn/fzf')
+call minpac#add('junegunn/fzf.vim')
+call minpac#add('kristijanhusak/vim-js-file-import')
+call minpac#add('kristijanhusak/vim-dirvish-git')
+call minpac#add('editorconfig/editorconfig-vim')
+call minpac#add('morhetz/gruvbox')
+call minpac#add('justinmk/vim-dirvish')
+call minpac#add('andymass/vim-matchup')
+call minpac#add('haya14busa/vim-asterisk')
+call minpac#add('osyo-manga/vim-anzu')
+call minpac#add('autozimu/LanguageClient-neovim', { 'do': '!bash install.sh' })
+call minpac#add('soywod/vim-keepeye')
+call minpac#add('wellle/targets.vim')
+
+command! PackUpdate packadd minpac | call minpac#update()
+command! PackClean  packadd minpac | call minpac#clean()
 
 " ================ General Config ==================== {{{
 
@@ -419,6 +422,9 @@ map # <Plug>(asterisk-z#)<Plug>(anzu-update-search-status-with-echo)
 map g* <Plug>(asterisk-gz*)<Plug>(anzu-update-search-status-with-echo)
 map g# <Plug>(asterisk-gz#)<Plug>(anzu-update-search-status-with-echo)
 
+map <c-q> :KeepEyeClear<CR>
+map <C-n> :NERDTreeToggle<CR>
+
 " Language client context menu
 nnoremap <Leader>r :call LanguageClient_contextMenu()<CR>
 
@@ -456,7 +462,7 @@ let g:delimitMate_expand_cr = 1                                                 
 
 let g:ale_javascript_prettier_options = '--print-width 100'                     "Set max width to 100 chars for prettier
 let g:ale_fixers = ['prettier']
-let b:ale_linters = ['google-java-format']
+"let b:ale_linters = ['google-java-format']
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:airline#extensions#ale#enabled = 1
 let g:ale_completion_enabled = 1
@@ -467,8 +473,6 @@ let g:ale_sign_warning = '⚠'                                                  
 
 let g:jsx_ext_required = 1                                                      "Force jsx extension for jsx filetype
 let g:javascript_plugin_jsdoc = 1                                               "Enable syntax highlighting for js doc blocks
-
-let g:vimwiki_list = [{'path': '~/Dropbox/vimwiki'}]                            "Use dropbox folder for easier syncing of wiki
 
 let g:matchup_matchparen_status_offscreen = 0                                   "Do not show offscreen closing match in statusline
 
@@ -493,6 +497,8 @@ let g:keepeye_start = v:true                                                    
 hi User4 guifg=#FFFFFF guibg=#FF0000
 let g:keepeye_message_hl_user = 4                                               "Use User4 hl group when showing keepeye message
 
+let g:go_fmt_command = "goimports"
+
+let g:rustfmt_autosave = 1
+
 call CustomDiffColors()                                                         "Use custom diff colors
-" }}}
-" vim:foldenable:foldmethod=marker
