@@ -17,6 +17,9 @@ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 #export JAVA_HOME=/usr/lib/jvm/jdk-10
 export PATH=$PATH:$JAVA_HOME/bin
 
+export IAM_HOME=/home/josh/iam
+export PATH=$PATH:$IAM_HOME
+
 export M2_HOME=/home/josh/uportal/maven
 export M2=$M2_HOME/bin
 export PATH=$PATH:$M2
@@ -35,12 +38,61 @@ export VUE_HOME=/usr/local/bin/vue
 export PATH=$PATH:$VUE_HOME
 export JAVA_OPTS="-server -XX:MaxPermSize=512m -Xms1024m -Xmx2048m"
 
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOPATH/bin
+
 export PORTAL_HOME=~/uportal/
+export YAOURT_COLORS="nb=1:pkg=1:ver=1;32:lver=1;45:installed=1;42:grp=1;34:od=1;41;5:votes=1;44:dsc=0:other=1;35"
+export SDKMAN_DIR="/home/josh/.sdkman"
+[[ -s "/home/josh/.sdkman/bin/sdkman-init.sh" ]] && source "/home/josh/.sdkman/bin/sdkman-init.sh"
 
 cd() {
    builtin cd "$@";
    ls;
 }
+
+[[ $- != *i* ]] && return
+
+colors() {
+        local fgc bgc vals seq0
+
+        printf "Color escapes are %s\n" '\e[${value};...;${value}m'
+        printf "Values 30..37 are \e[33mforeground colors\e[m\n"
+        printf "Values 40..47 are \e[43mbackground colors\e[m\n"
+        printf "Value  1 gives a  \e[1mbold-faced look\e[m\n\n"
+
+        # foreground colors
+        for fgc in {30..37}; do
+                # background colors
+                for bgc in {40..47}; do
+                        fgc=${fgc#37} # white
+                        bgc=${bgc#40} # black
+
+                        vals="${fgc:+$fgc;}${bgc}"
+                        vals=${vals%%;}
+
+                        seq0="${vals:+\e[${vals}m}"
+                        printf "  %-9s" "${seq0:-(default)}"
+                        printf " ${seq0}TEXT\e[m"
+                        printf " \e[${vals:+${vals+$vals;}}1mBOLD\e[m"
+                done
+                echo; echo
+        done
+}
+
+[ -r /usr/share/bash-completion/bash_completion ] && . /usr/share/bash-completion/bash_completion
+
+# Change the window title of X terminals
+case ${TERM} in
+        xterm*|rxvt*|Eterm*|aterm|kterm|gnome*|interix|konsole*)
+                PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\007"'
+                ;;
+        screen*)
+                PROMPT_COMMAND='echo -ne "\033_${USER}@${HOSTNAME%%.*}:${PWD/#$HOME/\~}\033\\"'
+                ;;
+esac
+
+use_color=true
 
 # My Tomcat Script
 function t {
@@ -81,19 +133,19 @@ done
 }
 
 function gradleDeploy {
-  find src/main/react/src -name "*.js" -exec prettier --single-quote --no-bracket-spacing --write --no-semi {} \;  
-  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then 
+  find src/main/react/src -name "*.js" -exec prettier --single-quote --no-bracket-spacing --write --no-semi {} \;
+  if gradle clean build -Dfilters=/home/$USER/uportal/uportal/filters/local.properties; then
     sleep 1
     WARPATH=`readlink -f $(find . -name '*.war' -type f)`
     cd ~/uportal/uportal
     sleep 1
-   
+
     /home/josh/uportal/uportal/bin/webapp_cntl.sh stop bookmarks
     rm -rf ~/uportal/tomcat/webapps/bookmarks
     ant deployPortletApp -DportletApp=$WARPATH
     /home/josh/uportal/uportal/bin/webapp_cntl.sh start bookmarks
     echo $WARPATH
-    cd -   
+    cd -
   fi
 }
 
@@ -173,6 +225,11 @@ fi
 #export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
 
 # some more les
+alias cp="cp -i"                          # confirm before overwriting something
+alias df='df -h'                          # human-readable sizes
+alias free='free -m'                      # show sizes in MB
+alias np='nano -w PKGBUILD'
+alias more=less
 alias ll='ls -alF'
 alias LS='ls'
 alias la='ls -A'
@@ -180,12 +237,12 @@ alias sl='sl -alFe'
 alias l='ls -CF'
 alias apt='sudo apt'
 alias c='clear'
-alias ..='cd ../..' 
-alias ...='cd ../../../' 
+alias ..='cd ../..'
+alias ...='cd ../../../'
 alias ....='cd ../../../../'
 alias .....='cd ../../../../../'
 alias reboot='sudo /sbin/reboot'
-alias poweroff='sudo /sbin/poweroff' 
+alias poweroff='sudo /sbin/poweroff'
 alias webapp=~/uportal/uportal/bin/webapp_cntl.sh
 alias antinit='ant clean initportal'
 alias cdup='cd ~/uportal/uportal'
@@ -223,8 +280,31 @@ if ! shopt -oq posix; then
 fi
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/home/josh/.sdkman"
-[[ -s "/home/josh/.sdkman/bin/sdkman-init.sh" ]] && source "/home/josh/.sdkman/bin/sdkman-init.sh"
 
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOPATH/bin
+
+#
+# # ex - archive extractor
+# # usage: ex <file>
+ex ()
+{
+  if [ -f $1 ] ; then
+    case $1 in
+      *.tar.bz2)   tar xjf $1   ;;
+      *.tar.gz)    tar xzf $1   ;;
+      *.bz2)       bunzip2 $1   ;;
+      *.rar)       unrar x $1     ;;
+      *.gz)        gunzip $1    ;;
+      *.tar)       tar xf $1    ;;
+      *.tbz2)      tar xjf $1   ;;
+      *.tgz)       tar xzf $1   ;;
+      *.zip)       unzip $1     ;;
+      *.Z)         uncompress $1;;
+      *.7z)        7z x $1      ;;
+      *)           echo "'$1' cannot be extracted via ex()" ;;
+    esac
+  else
+    echo "'$1' is not a valid file"
+  fi
+}
+
+# better yaourt colors
